@@ -2,7 +2,7 @@
   "name": "App Name",
   "short_name": "AppName",
   "description": "Descripción de la app",
-  "start_url": "/",
+  "start_url": "./",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
