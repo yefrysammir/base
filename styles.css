@@ -1,0 +1,559 @@
+/* ═══════════════════════════════════════════════
+   TOKENS
+═══════════════════════════════════════════════ */
+:root {
+  /* Colores — personaliza aquí */
+  --c-bg:          #0a0a0a;
+  --c-surface:     #141414;
+  --c-surface-2:   #1e1e1e;
+  --c-border:      rgba(255,255,255,.08);
+  --c-text:        #f0f0f0;
+  --c-text-muted:  #888;
+  --c-accent:      #4f8ef7;
+  --c-accent-dark: #2a65d4;
+  --c-danger:      #e05555;
+
+  /* Tipografía */
+  --font-sans:  system-ui, -apple-system, BlinkMacSystemFont,
+                'Segoe UI', sans-serif;
+  --font-mono:  'SF Mono', 'Fira Code', monospace;
+  --fs-xs:   .70rem;
+  --fs-sm:   .825rem;
+  --fs-base: 1rem;
+  --fs-lg:   1.125rem;
+  --fs-xl:   1.375rem;
+  --fs-2xl:  1.75rem;
+  --lh-base: 1.5;
+  --fw-normal: 400;
+  --fw-medium: 500;
+  --fw-bold:   700;
+
+  /* Espaciado (múltiplos de 4 px) */
+  --sp-1: .25rem;
+  --sp-2: .5rem;
+  --sp-3: .75rem;
+  --sp-4: 1rem;
+  --sp-5: 1.25rem;
+  --sp-6: 1.5rem;
+  --sp-8: 2rem;
+  --sp-10: 2.5rem;
+  --sp-12: 3rem;
+
+  /* Radios */
+  --r-sm:   6px;
+  --r-md:   12px;
+  --r-lg:   18px;
+  --r-full: 9999px;
+
+  /* Sombras */
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.4);
+  --shadow-md: 0 4px 16px rgba(0,0,0,.5);
+
+  /* Transiciones */
+  --ease:       cubic-bezier(.4,0,.2,1);
+  --dur-fast:   120ms;
+  --dur-normal: 220ms;
+  --dur-slow:   380ms;
+
+  /* Safe areas — se rellenan via JS también */
+  --sat: env(safe-area-inset-top,    0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sal: env(safe-area-inset-left,   0px);
+  --sar: env(safe-area-inset-right,  0px);
+
+  /* Layout */
+  --header-h: 56px;
+  --nav-h:    56px;
+}
+
+/* ═══════════════════════════════════════════════
+   RESET & BASE
+═══════════════════════════════════════════════ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  /* Bloquea zoom */
+  touch-action: manipulation;
+  scroll-behavior: smooth;
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--fs-base);
+  line-height: var(--lh-base);
+  color: var(--c-text);
+  background: var(--c-bg);
+  min-height: 100%;
+  /* Ocultar scrollbar pero mantener scroll */
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: none;          /* Firefox */
+  -ms-overflow-style: none;       /* IE */
+  -webkit-overflow-scrolling: touch;
+  /* Sin selección por defecto */
+  -webkit-user-select: none;
+  user-select: none;
+  /* Sin highlight al tocar en móvil */
+  -webkit-tap-highlight-color: transparent;
+  /* Suaviza fuentes */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-synthesis: none;
+}
+
+body::-webkit-scrollbar { display: none; }
+
+/* Imágenes no seleccionables ni arrastrables */
+img, svg, video, canvas {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none; /* quitar si necesitas clicks en imágenes */
+  display: block;
+  max-width: 100%;
+}
+
+/* Botones y links — recuperar pointer events */
+a, button, [role="button"], label {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+/* Inputs / textareas — recuperar selección */
+input, textarea, select, [contenteditable] {
+  -webkit-user-select: text;
+  user-select: text;
+  pointer-events: auto;
+  font-family: inherit;
+}
+
+/* Eliminar estilos nativos de botones */
+button {
+  border: none;
+  background: none;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* ═══════════════════════════════════════════════
+   LOADER / SPLASH
+═══════════════════════════════════════════════ */
+#app-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: var(--c-bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-8);
+  transition: opacity var(--dur-slow) var(--ease),
+              visibility var(--dur-slow) var(--ease);
+}
+
+#app-loader.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.loader-logo {
+  display: flex;
+  gap: .05em;
+  font-size: var(--fs-2xl);
+  font-weight: var(--fw-bold);
+  letter-spacing: -.02em;
+}
+
+/* Animación letra a letra mientras carga */
+.loader-letter {
+  opacity: 0;
+  transform: translateY(12px);
+  animation: letter-in var(--dur-slow) var(--ease) forwards;
+  animation-delay: calc(var(--i) * 80ms);
+}
+
+@keyframes letter-in {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.loader-bar {
+  width: 120px;
+  height: 2px;
+  background: var(--c-surface-2);
+  border-radius: var(--r-full);
+  overflow: hidden;
+}
+
+.loader-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--c-accent);
+  border-radius: var(--r-full);
+  animation: bar-fill 1.2s var(--ease) forwards;
+}
+
+@keyframes bar-fill {
+  0%   { width: 0%; }
+  60%  { width: 80%; }
+  100% { width: 100%; }
+}
+
+/* ═══════════════════════════════════════════════
+   APP SHELL
+═══════════════════════════════════════════════ */
+#app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;           /* dvh = dynamic viewport height */
+  min-height: 100vh;            /* fallback */
+  opacity: 1;
+  transition: opacity var(--dur-normal) var(--ease);
+}
+
+#app.app-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════════
+   SAFE AREA SPACERS
+═══════════════════════════════════════════════ */
+.safe-top-spacer {
+  height: var(--sat);
+  flex-shrink: 0;
+}
+
+.safe-bottom-spacer {
+  height: var(--sab);
+  flex-shrink: 0;
+}
+
+/* ═══════════════════════════════════════════════
+   HEADER
+═══════════════════════════════════════════════ */
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: var(--header-h);
+  background: color-mix(in srgb, var(--c-bg) 80%, transparent);
+  -webkit-backdrop-filter: blur(16px) saturate(1.5);
+  backdrop-filter: blur(16px) saturate(1.5);
+  border-bottom: 1px solid var(--c-border);
+  flex-shrink: 0;
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  padding: 0 calc(var(--sp-4) + var(--sal)) 0 calc(var(--sp-4) + var(--sal));
+}
+
+.app-title {
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-bold);
+  letter-spacing: -.02em;
+}
+
+.icon-btn {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--r-md);
+  color: var(--c-text);
+  transition: background var(--dur-fast) var(--ease);
+}
+
+.icon-btn:active { background: var(--c-surface-2); }
+
+.icon-btn svg {
+  pointer-events: none;
+  width: 20px;
+  height: 20px;
+}
+
+/* ═══════════════════════════════════════════════
+   MAIN / SCROLL AREA
+═══════════════════════════════════════════════ */
+.app-main {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;   /* evita pull-to-refresh nativo */
+  scrollbar-width: none;
+  padding: var(--sp-6) calc(var(--sp-4) + var(--sal));
+  padding-bottom: calc(var(--nav-h) + var(--sab) + var(--sp-6));
+}
+
+.app-main::-webkit-scrollbar { display: none; }
+
+/* ═══════════════════════════════════════════════
+   SECCIONES / CONTENIDO BASE
+═══════════════════════════════════════════════ */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  max-width: 640px;
+  margin-inline: auto;
+}
+
+.section-title {
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-bold);
+  letter-spacing: -.025em;
+}
+
+.section-body {
+  font-size: var(--fs-base);
+  color: var(--c-text-muted);
+  line-height: 1.65;
+}
+
+/* ═══════════════════════════════════════════════
+   CAMPOS
+═══════════════════════════════════════════════ */
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.field-label {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--c-text-muted);
+  pointer-events: none;
+}
+
+.field-input,
+.field-textarea {
+  width: 100%;
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-md);
+  padding: var(--sp-3) var(--sp-4);
+  color: var(--c-text);
+  font-size: var(--fs-base);
+  outline: none;
+  transition: border-color var(--dur-fast) var(--ease),
+              box-shadow   var(--dur-fast) var(--ease);
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.field-input::placeholder,
+.field-textarea::placeholder { color: var(--c-text-muted); opacity: .6; }
+
+.field-input:focus,
+.field-textarea:focus {
+  border-color: var(--c-accent);
+  box-shadow: 0 0 0 3px rgba(79,142,247,.2);
+}
+
+.field-textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+/* ═══════════════════════════════════════════════
+   BOTONES
+═══════════════════════════════════════════════ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  padding: var(--sp-3) var(--sp-6);
+  border-radius: var(--r-full);
+  font-size: var(--fs-base);
+  font-weight: var(--fw-medium);
+  letter-spacing: -.01em;
+  transition: opacity var(--dur-fast) var(--ease),
+              transform var(--dur-fast) var(--ease),
+              background var(--dur-fast) var(--ease);
+  will-change: transform;
+}
+
+.btn:active {
+  transform: scale(.96);
+  opacity: .85;
+}
+
+.btn-primary {
+  background: var(--c-accent);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: var(--c-accent-dark);
+}
+
+.btn-secondary {
+  background: var(--c-surface-2);
+  color: var(--c-text);
+  border: 1px solid var(--c-border);
+}
+
+.btn-secondary:hover {
+  background: var(--c-surface);
+}
+
+.btn-danger {
+  background: var(--c-danger);
+  color: #fff;
+}
+
+/* ═══════════════════════════════════════════════
+   BOTTOM NAV
+═══════════════════════════════════════════════ */
+.app-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  height: calc(var(--nav-h) + var(--sab));
+  padding-bottom: var(--sab);
+  background: color-mix(in srgb, var(--c-bg) 85%, transparent);
+  -webkit-backdrop-filter: blur(16px) saturate(1.5);
+  backdrop-filter: blur(16px) saturate(1.5);
+  border-top: 1px solid var(--c-border);
+  display: flex;
+  align-items: stretch;
+}
+
+.nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-1);
+  color: var(--c-text-muted);
+  padding-bottom: 2px;
+  transition: color var(--dur-fast) var(--ease);
+  position: relative;
+}
+
+.nav-item.active  { color: var(--c-accent); }
+.nav-item:active  { opacity: .7; }
+
+.nav-icon {
+  width: 22px;
+  height: 22px;
+}
+
+.nav-label {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  letter-spacing: .01em;
+}
+
+/* ═══════════════════════════════════════════════
+   UTILIDADES
+═══════════════════════════════════════════════ */
+
+/* Texto seleccionable (para párrafos que sí deben copiarse) */
+.selectable {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+/* Truncar texto */
+.truncate {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* Ocultar visualmente pero mantener accesibilidad */
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Divisor */
+.divider {
+  height: 1px;
+  background: var(--c-border);
+  margin: var(--sp-4) 0;
+}
+
+/* Card base */
+.card {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-4);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ═══════════════════════════════════════════════
+   FEEDBACK HÁPTICO VISUAL (tap ripple)
+═══════════════════════════════════════════════ */
+.ripple-host {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple-host .ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,.15);
+  pointer-events: none;
+  transform: scale(0);
+  animation: ripple-out .5s var(--ease) forwards;
+}
+
+@keyframes ripple-out {
+  to { transform: scale(4); opacity: 0; }
+}
+
+/* ═══════════════════════════════════════════════
+   REDUCIR MOVIMIENTO (accesibilidad)
+═══════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════
+   RESPONSIVE — tablet/desktop
+   La app ya es mobile-first; en pantallas grandes
+   se puede "box" para que no se estire demasiado.
+═══════════════════════════════════════════════ */
+@media (min-width: 640px) {
+  .app-header .header-inner,
+  .app-main { max-width: 640px; margin-inline: auto; }
+
+  .app-nav { justify-content: center; }
+  .nav-item { max-width: 96px; }
+}

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+<head>
+  <!-- ═══════════════════════════════════════════
+       CHARSET & VIEWPORT
+  ═══════════════════════════════════════════ -->
+  <meta charset="UTF-8" />
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0,
+                 maximum-scale=1.0, minimum-scale=1.0,
+                 user-scalable=no, viewport-fit=cover" />
+
+  <!-- ═══════════════════════════════════════════
+       APP META
+  ═══════════════════════════════════════════ -->
+  <title>App Name</title>
+  <meta name="description" content="Descripción de la app" />
+  <meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+  <meta name="color-scheme" content="dark light" />
+
+  <!-- ═══════════════════════════════════════════
+       PWA
+  ═══════════════════════════════════════════ -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="mobile-web-app-capable" content="yes" />
+
+  <!-- ═══════════════════════════════════════════
+       iOS SAFARI
+  ═══════════════════════════════════════════ -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="App Name" />
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/icon-180.png" />
+  <link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152.png" />
+  <link rel="apple-touch-icon" sizes="120x120" href="icons/icon-120.png" />
+  <!-- Splash screens iOS (reemplazar con los tuyos) -->
+  <!--
+  <link rel="apple-touch-startup-image"
+        href="splash/splash-1125x2436.png"
+        media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)" />
+  -->
+
+  <!-- ═══════════════════════════════════════════
+       ANDROID / CHROME
+  ═══════════════════════════════════════════ -->
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
+  <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png" />
+  <link rel="shortcut icon" href="icons/favicon.ico" />
+
+  <!-- ═══════════════════════════════════════════
+       OPEN GRAPH / SOCIAL
+  ═══════════════════════════════════════════ -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="App Name" />
+  <meta property="og:description" content="Descripción de la app" />
+  <meta property="og:image" content="icons/og-image.png" />
+  <meta property="og:url" content="https://tudominio.com" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- ═══════════════════════════════════════════
+       ESTILOS
+  ═══════════════════════════════════════════ -->
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+
+  <!-- ─────────────────────────────────────────
+       SPLASH / LOADER (se auto-oculta con JS)
+  ───────────────────────────────────────── -->
+  <div id="app-loader" aria-hidden="true">
+    <div class="loader-logo">
+      <span class="loader-letter" style="--i:0">Y</span>
+      <span class="loader-letter" style="--i:1">E</span>
+      <span class="loader-letter" style="--i:2">S</span>
+    </div>
+    <div class="loader-bar"><div class="loader-fill"></div></div>
+  </div>
+
+  <!-- ─────────────────────────────────────────
+       APP ROOT
+  ───────────────────────────────────────── -->
+  <div id="app" class="app-hidden">
+
+    <!-- STATUS BAR SPACER (iOS notch / dynamic island) -->
+    <div class="safe-top-spacer" aria-hidden="true"></div>
+
+    <!-- HEADER -->
+    <header class="app-header">
+      <div class="header-inner">
+        <h1 class="app-title">App Name</h1>
+        <button class="icon-btn" aria-label="Menú">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="6"  x2="21" y2="6"/>
+            <line x1="3" y1="12" x2="21" y2="12"/>
+            <line x1="3" y1="18" x2="21" y2="18"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="app-main">
+      <section class="section">
+        <h2 class="section-title">Sección</h2>
+        <p class="section-body">
+          Aquí va el contenido. Este texto no es seleccionable por defecto.
+        </p>
+
+        <!-- Ejemplo de input — sí permite selección/copia -->
+        <div class="field-group">
+          <label class="field-label" for="demo-input">Campo</label>
+          <input id="demo-input" class="field-input" type="text"
+                 placeholder="Escribe algo..." autocomplete="off"
+                 autocorrect="off" autocapitalize="off" spellcheck="false" />
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="demo-textarea">Textarea</label>
+          <textarea id="demo-textarea" class="field-textarea"
+                    placeholder="Escribe algo..."></textarea>
+        </div>
+
+        <button class="btn btn-primary" type="button">Acción principal</button>
+        <button class="btn btn-secondary" type="button">Acción secundaria</button>
+      </section>
+    </main>
+
+    <!-- BOTTOM NAV -->
+    <nav class="app-nav" aria-label="Navegación principal">
+      <button class="nav-item active" type="button" aria-label="Inicio">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+        <span class="nav-label">Inicio</span>
+      </button>
+      <button class="nav-item" type="button" aria-label="Buscar">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <span class="nav-label">Buscar</span>
+      </button>
+      <button class="nav-item" type="button" aria-label="Perfil">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+        <span class="nav-label">Perfil</span>
+      </button>
+    </nav>
+
+    <!-- SAFE AREA BOTTOM -->
+    <div class="safe-bottom-spacer" aria-hidden="true"></div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
