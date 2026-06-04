@@ -1,7 +1,7 @@
 @media (display-mode: standalone), (display-mode: fullscreen) {
   .app-main {
-    padding-top: max(70px, calc(var(--sal));
-    padding-bottom: max(40px, calc(var(--sab));
+    padding-top: max(70px, calc(var(--sal)));
+    padding-bottom: max(40px, calc(var(--sab)));
   }
 }
 
