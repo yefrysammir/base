@@ -1,9 +1,21 @@
 @media (display-mode: standalone), (display-mode: fullscreen) {
   .app-main {
-    padding-top: max(60px, calc(var(--sp-4) + var(--sal)));
-  padding-bottom: max(30px, calc(var(--nav-h) + var(--sab) + var(--sp-6)));
+    padding-top: max(15px, calc(var(--sp-4) + var(--sal)));
+    padding-bottom: max(15px, calc(var(--nav-h) + var(--sab) + var(--sp-6) + 12px));
+  }
+
+  /* Header se baja en PWA */
+  .app-header {
+    padding-top: 10px;
+  }
+
+  /* Nav sube (más padding inferior) */
+  .app-nav {
+    padding-bottom: calc(var(--sab) + 12px);
+    height: calc(var(--nav-h) + var(--sab) + 12px);
+  }
 }
-}
+
 
 /* ═══════════════════════════════════════════════
    TOKENS
@@ -368,7 +380,7 @@ body.loader-active {
   overflow-y: auto;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
-  overscroll-behavior-y: none;   /* contain evita pull-to-refresh nativo */
+  overscroll-behavior-y: contain;   /* contain evita pull-to-refresh nativo */
   scrollbar-width: none;
   padding: var(--sp-6) calc(var(--sp-4) + var(--sal));
   padding-bottom: calc(var(--nav-h) + var(--sab) + var(--sp-6));
