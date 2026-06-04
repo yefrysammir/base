@@ -59,6 +59,15 @@
   <meta name="twitter:card" content="summary_large_image" />
 
   <!-- ═══════════════════════════════════════════
+       MATERIAL SYMBOLS OUTLINED (weight 400)
+       <span class="icon">nombre</span>
+  ═══════════════════════════════════════════ -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block" />
+
+  <!-- ═══════════════════════════════════════════
        ESTILOS
   ═══════════════════════════════════════════ -->
   <link rel="stylesheet" href="styles.css" />
@@ -73,7 +82,13 @@
     <div class="loader-logo">
       <span class="loader-letter" style="--i:0">Y</span>
       <span class="loader-letter" style="--i:1">E</span>
-      <span class="loader-letter" style="--i:2">S</span>
+      <span class="loader-letter" style="--i:2">E</span>
+<span class="loader-letter" style="--i:3">S</span>
+<span class="loader-letter" style="--i:4">E</span>
+<span class="loader-letter" style="--i:5">A</span>
+<span class="loader-letter" style="--i:6">Y</span>
+<span class="loader-letter" style="--i:7">E</span>
+<span class="loader-letter" style="--i:8">!</span>
     </div>
     <div class="loader-bar"><div class="loader-fill"></div></div>
   </div>
@@ -91,12 +106,7 @@
       <div class="header-inner">
         <h1 class="app-title">App Name</h1>
         <button class="icon-btn" aria-label="Menú">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="3" y1="6"  x2="21" y2="6"/>
-            <line x1="3" y1="12" x2="21" y2="12"/>
-            <line x1="3" y1="18" x2="21" y2="18"/>
-          </svg>
+          <span class="icon" aria-hidden="true">menu</span>
         </button>
       </div>
     </header>
@@ -131,30 +141,15 @@
     <!-- BOTTOM NAV -->
     <nav class="app-nav" aria-label="Navegación principal">
       <button class="nav-item active" type="button" aria-label="Inicio">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none"
-             stroke="currentColor" stroke-width="2"
-             stroke-linecap="round" stroke-linejoin="round">
-          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-          <polyline points="9 22 9 12 15 12 15 22"/>
-        </svg>
+        <span class="icon nav-icon" aria-hidden="true">home</span>
         <span class="nav-label">Inicio</span>
       </button>
       <button class="nav-item" type="button" aria-label="Buscar">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none"
-             stroke="currentColor" stroke-width="2"
-             stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="11" cy="11" r="8"/>
-          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-        </svg>
+        <span class="icon nav-icon" aria-hidden="true">search</span>
         <span class="nav-label">Buscar</span>
       </button>
       <button class="nav-item" type="button" aria-label="Perfil">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none"
-             stroke="currentColor" stroke-width="2"
-             stroke-linecap="round" stroke-linejoin="round">
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-          <circle cx="12" cy="7" r="4"/>
-        </svg>
+        <span class="icon nav-icon" aria-hidden="true">person</span>
         <span class="nav-label">Perfil</span>
       </button>
     </nav>

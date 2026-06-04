@@ -11,6 +11,9 @@ const CACHE_SHELL = [
   '/manifest.json',
   '/icons/icon-192.png',
   '/icons/icon-512.png',
+  '/img/salem.png',      // ← aquí
+  '/img/otra-imagen.jpg', // ← y así sucesivamente
+  '/img/banner.webp',
 ];
 
 /* ── INSTALL: pre-cachear shell ── */

@@ -32,11 +32,50 @@
   }, { passive: false });
 
   // Bloquea pull-to-refresh en Chrome Android
-  document.body.style.overscrollBehaviorY = 'contain';
+  document.body.style.overscrollBehaviorY = 'none';
+
+document.addEventListener('touchmove', (e) => {
+  if (e.target === document.body || e.target === document.documentElement) {
+    e.preventDefault();
+  }
+}, { passive: false });
+
 })();
 
 /* ──────────────────────────────────────────────
-   2. SAFE AREA — inyectar variables CSS reales
+   2. SCROLL FANTASMA — bloqueo en páginas full-screen
+   El loader y cualquier vista con .page-locked
+   bloquea scroll en iOS también (position:fixed
+   no es suficiente en Safari sin esto).
+────────────────────────────────────────────── */
+(function ghostScrollLock() {
+  let lockedEl = null;
+  let startY   = 0;
+
+  function isLocked(target) {
+    return target.closest('#app-loader, .page-locked') !== null;
+  }
+
+  document.addEventListener('touchstart', (e) => {
+    startY = e.touches[0].clientY;
+    if (isLocked(e.target)) lockedEl = e.target;
+    else lockedEl = null;
+  }, { passive: true });
+
+  document.addEventListener('touchmove', (e) => {
+    if (!lockedEl) return;
+    // Bloquear cualquier intento de scroll en elementos fijos
+    e.preventDefault();
+  }, { passive: false });
+
+  // Bloquear wheel también (desktop/iPad trackpad)
+  document.addEventListener('wheel', (e) => {
+    if (isLocked(e.target)) e.preventDefault();
+  }, { passive: false });
+})();
+
+/* ──────────────────────────────────────────────
+   3. SAFE AREA — inyectar variables CSS reales
    (útil cuando env() no tiene soporte completo)
 ────────────────────────────────────────────── */
 (function applySafeAreas() {
@@ -53,25 +92,27 @@
 })();
 
 /* ──────────────────────────────────────────────
-   3. LOADER → revelar APP
+   4. LOADER → revelar APP
 ────────────────────────────────────────────── */
 (function initLoader() {
   const loader = document.getElementById('app-loader');
   const app    = document.getElementById('app');
   if (!loader || !app) return;
 
+  // Bloquear scroll en body mientras el loader está activo
+  document.body.classList.add('loader-active');
+
   function revealApp() {
     loader.classList.add('hidden');
     app.classList.remove('app-hidden');
+    document.body.classList.remove('loader-active');
 
-    // Limpiar DOM después de la transición
     loader.addEventListener('transitionend', () => {
       loader.remove();
     }, { once: true });
   }
 
-  // Esperar a que el DOM esté listo + mínimo visual de 1.3 s
-  const minDelay = new Promise(res => setTimeout(res, 1300));
+  const minDelay = new Promise(res => setTimeout(res, 1400));
   const domReady = new Promise(res => {
     if (document.readyState === 'complete') return res();
     window.addEventListener('load', res, { once: true });
@@ -79,9 +120,8 @@
 
   Promise.all([minDelay, domReady]).then(revealApp);
 })();
-
 /* ──────────────────────────────────────────────
-   4. RIPPLE EN BOTONES / NAV ITEMS
+   5. RIPPLE EN BOTONES / NAV ITEMS
 ────────────────────────────────────────────── */
 (function initRipple() {
   function addRipple(e) {
@@ -106,7 +146,7 @@
 })();
 
 /* ──────────────────────────────────────────────
-   5. BOTTOM NAV — highlight activo
+   6. BOTTOM NAV — highlight activo
 ────────────────────────────────────────────── */
 (function initNav() {
   const items = document.querySelectorAll('.nav-item');
@@ -119,7 +159,7 @@
 })();
 
 /* ──────────────────────────────────────────────
-   6. VIEWPORT HEIGHT — fix para Safari/Chrome
+   7. VIEWPORT HEIGHT — fix para Safari/Chrome
    100vh en Safari incluye la barra del navegador,
    dvh lo resuelve pero aquí lo forzamos también.
 ────────────────────────────────────────────── */
@@ -133,7 +173,7 @@
 })();
 
 /* ──────────────────────────────────────────────
-   7. REGISTRO DEL SERVICE WORKER
+   8. REGISTRO DEL SERVICE WORKER
 ────────────────────────────────────────────── */
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
@@ -144,7 +184,7 @@ if ('serviceWorker' in navigator) {
 }
 
 /* ──────────────────────────────────────────────
-   8. DETECCIÓN DE MODO (PWA vs Browser)
+   9. DETECCIÓN DE MODO (PWA vs Browser)
    Agrega clase al <html> para estilos específicos
 ────────────────────────────────────────────── */
 (function detectMode() {
@@ -154,7 +194,7 @@ if ('serviceWorker' in navigator) {
 })();
 
 /* ──────────────────────────────────────────────
-   9. HAPTICS (vibración táctil cuando disponible)
+   10. HAPTICS (vibración táctil cuando disponible)
    Usar: haptic('light') | haptic('medium') | haptic('heavy')
 ────────────────────────────────────────────── */
 window.haptic = function haptic(type = 'light') {
@@ -164,7 +204,7 @@ window.haptic = function haptic(type = 'light') {
 };
 
 /* ──────────────────────────────────────────────
-   10. NETWORK STATUS
+   11. NETWORK STATUS
 ────────────────────────────────────────────── */
 (function networkStatus() {
   function update() {
@@ -173,4 +213,21 @@ window.haptic = function haptic(type = 'light') {
   update();
   window.addEventListener('online',  update);
   window.addEventListener('offline', update);
+})();
+
+
+/* ──────────────────────────────────────────────
+   12. BLOQUEO INSPECCION
+────────────────────────────────────────────── */
+
+(function antiDevTools() {
+  // Atajos de teclado
+  document.addEventListener('keydown', (e) => {
+    if (
+      e.key === 'F12' ||
+      (e.ctrlKey && e.shiftKey && ['I','J','C','U'].includes(e.key)) ||
+      (e.ctrlKey && e.key === 'U') ||
+      (e.metaKey && e.altKey && e.key === 'I')
+    ) e.preventDefault();
+  });
 })();
