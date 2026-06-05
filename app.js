@@ -231,3 +231,47 @@ window.haptic = function haptic(type = 'light') {
     ) e.preventDefault();
   });
 })();
+
+/* ──────────────────────────────────────────────
+   13. FIX SCROLL DESKTOP — .app-main focusable
+   y redirección de teclas de navegación.
+   El body ya no scrollea (overflow:hidden), por
+   lo que las flechas/PageUp/Down deben actuar
+   sobre .app-main directamente.
+────────────────────────────────────────────── */
+(function fixDesktopScroll() {
+  const main = document.querySelector('.app-main');
+  if (!main) return;
+
+  // Hacer .app-main focusable para que las flechas del teclado lo scrolleen
+  main.setAttribute('tabindex', '0');
+  main.style.outline = 'none';
+
+  // Auto-focus al cargar para que las flechas funcionen inmediatamente
+  window.addEventListener('load', () => {
+    main.focus({ preventScroll: true });
+  });
+
+  // Redirigir teclas de navegación a .app-main cuando no estamos en un input
+  document.addEventListener('keydown', (e) => {
+    const tag = e.target.tagName.toLowerCase();
+    if (['input', 'textarea', 'select'].includes(tag)) return;
+
+    const keys = ['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', ' ', 'Home', 'End'];
+    if (!keys.includes(e.key)) return;
+
+    e.preventDefault();
+    const step = 40;
+    const page = main.clientHeight * 0.8;
+
+    switch (e.key) {
+      case 'ArrowDown':  main.scrollTop += step; break;
+      case 'ArrowUp':    main.scrollTop -= step; break;
+      case 'PageDown':
+      case ' ':          main.scrollTop += page; break;
+      case 'PageUp':     main.scrollTop -= page; break;
+      case 'Home':       main.scrollTop = 0; break;
+      case 'End':        main.scrollTop = main.scrollHeight; break;
+    }
+  });
+})();
