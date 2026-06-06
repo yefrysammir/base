@@ -336,7 +336,7 @@ body.loader-active {
   overflow-y: visible;        /* BROWSER: sin scroll interno */
   overflow-x: hidden;
   padding: var(--sp-6) calc(var(--sp-4) + var(--sal));
-  padding-bottom: calc(var(--nav-h) + var(--sab) + var(--sp-6));
+  padding-bottom: calc(var(--nav-h) + var(--sab) + 50px + var(--sp-6));
 }
 
 /* ═══════════════════════════════════════════════
@@ -601,7 +601,8 @@ body.loader-active {
 }
 
 /* Spacer top oculto, el header fixed lo gestiona */
-.mode-pwa .safe-top-spacer {
+.mode-pwa .safe-top-spacer,
+.mode-pwa .safe-bottom-spacer {
   display: none;
 }
 
@@ -611,8 +612,8 @@ body.loader-active {
   top: 0;
   left: 0;
   right: 0;
-  padding-top: calc(var(--sat) + 30px);
-  height: calc(var(--header-h) + var(--sat) + 50px);
+  padding-top: calc(var(--sat) + 60px);
+  height: calc(var(--header-h) + var(--sat) + 60px);
 }
 
 .mode-pwa .header-inner {
@@ -626,7 +627,7 @@ body.loader-active {
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-y: contain;
   scrollbar-width: none;
-  padding-top: calc(var(--header-h) + var(--sat) + 50px + var(--sp-6));
+  padding-top: calc(var(--header-h) + var(--sat) + 60px + var(--sp-6));
   padding-bottom: calc(var(--nav-h) + var(--sab) + var(--sp-6));
 }
 
@@ -634,6 +635,6 @@ body.loader-active {
 
 /* Nav bottom con +50px padding-bottom */
 .mode-pwa .app-nav {
-  padding-bottom: calc(var(--sab) + 30px);
+  padding-bottom: calc(var(--sab) + 50px);
   height: calc(var(--nav-h) + var(--sab) + 50px);
 }
