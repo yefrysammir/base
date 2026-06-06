@@ -674,13 +674,13 @@ body.loader-active {
 
   /* Nav bottom: 50px extra de padding-bottom */
   .app-nav {
-    padding-bottom: calc(var(--sab) + 20px);
+    padding-bottom: calc(var(--sab) + 0px);
     height: calc(var(--nav-h) + var(--sab) + 50px);
   }
 
   /* Main compensa ambos elementos para que el contenido no quede tapado */
   .app-main {
-    padding-top: calc(var(--header-h) + var(--sat) + 70px + var(--sp-6));
+    padding-top: calc(var(--header-h) + var(--sat) + 60px + var(--sp-6));
     padding-bottom: calc(var(--nav-h) + var(--sab) + 70px + var(--sp-6));
   }
 }
