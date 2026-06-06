@@ -647,22 +647,6 @@ body.loader-active {
   top: 0;
   left: 0;
   right: 0;
-  z-index: 100;
-  height: calc(var(--header-h) + var(--sat)); /* Altura base + safe area top */
-  padding-top: var(--sat);  /* Respeta notch/status bar */
-  background: color-mix(in srgb, var(--c-bg) 80%, transparent);
-  -webkit-backdrop-filter: blur(16px) saturate(1.5);
-  backdrop-filter: blur(16px) saturate(1.5);
-  border-bottom: 1px solid var(--c-border);
-  flex-shrink: 0;
-}
-
-.mode-pwa .header-inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: var(--header-h);  /* CAMBIO: antes era 100%. Fijamos altura real del contenido para que no se comprima con padding */
-  padding: 0 calc(var(--sp-4) + var(--sal)) 0 calc(var(--sp-4) + var(--sal));
 }
 
 /* Main con scroll interno, compensa header y nav */
