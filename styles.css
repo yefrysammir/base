@@ -591,50 +591,119 @@ body.loader-active {
 
 /* Body sin scroll, todo va dentro de #app */
 .mode-pwa body {
-  overflow-y: hidden;
+  font-family: var(--font-sans);
+  font-size: var(--fs-base);
+  line-height: var(--lh-base);
+  color: var(--c-text);
+  background: var(--c-bg);
+  height: 100%;
+  /* Ocultar scrollbar — mantiene scroll funcional */
+  overflow-x: hidden;
+  overflow-y: hidden; /* CAMBIO: antes era auto. Evita scroll del body para que todo el scroll sea .app-main */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+  /* Sin selección por defecto */
+  -webkit-user-select: none;
+  user-select: none;
+  /* Sin highlight al tocar */
+  -webkit-tap-highlight-color: transparent;
+  /* Suaviza fuentes */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-synthesis: none;
 }
 
 /* #app ocupa exactamente el viewport */
 .mode-pwa #app {
-  height: 100dvh;
-  min-height: auto;
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;           /* CAMBIO: antes era min-height. Fuerza altura exacta para que flex:1 funcione */
+  min-height: 100vh;        /* fallback */
+  opacity: 1;
+  transition: opacity var(--dur-normal) var(--ease);
+}
+
+.mode-pwa #app.app-hidden {
+  opacity: 0;
+  pointer-events: none;
 }
 
 /* Spacer top oculto, el header fixed lo gestiona */
-.mode-pwa .safe-top-spacer,
+.mode-pwa .safe-top-spacer {
+  display: none;            /* CAMBIO: el header fixed gestiona su propio espacio top (safe area + padding) */
+  height: var(--sat);
+  flex-shrink: 0;
+}
+
 .mode-pwa .safe-bottom-spacer {
-  display: none;
+  height: var(--sab);
+  flex-shrink: 0;
 }
 
 /* Header FIJO, inmune al bounce, con +60px padding-top */
 .mode-pwa .app-header {
-  position: fixed;
+  position: fixed;          /* CAMBIO: antes era sticky. Fixed evita que el bounce lo mueva */
   top: 0;
   left: 0;
   right: 0;
-  padding-top: calc(var(--sat) + 60px);
-  height: calc(var(--header-h) + var(--sat) + 60px);
+  z-index: 100;
+  height: calc(var(--header-h) + var(--sat)); /* Altura base + safe area top */
+  padding-top: var(--sat);  /* Respeta notch/status bar */
+  background: color-mix(in srgb, var(--c-bg) 80%, transparent);
+  -webkit-backdrop-filter: blur(16px) saturate(1.5);
+  backdrop-filter: blur(16px) saturate(1.5);
+  border-bottom: 1px solid var(--c-border);
+  flex-shrink: 0;
 }
 
 .mode-pwa .header-inner {
-  height: var(--header-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--header-h);  /* CAMBIO: antes era 100%. Fijamos altura real del contenido para que no se comprima con padding */
+  padding: 0 calc(var(--sp-4) + var(--sal)) 0 calc(var(--sp-4) + var(--sal));
 }
 
 /* Main con scroll interno, compensa header y nav */
 .mode-pwa .app-main {
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
-  overscroll-behavior-y: contain;
+  overscroll-behavior-y: contain;   /* contain evita pull-to-refresh nativo */
   scrollbar-width: none;
-  padding-top: calc(var(--header-h) + var(--sat) + 60px + var(--sp-6));
+  padding: var(--sp-6) calc(var(--sp-4) + var(--sal));
+  /* Compensamos header fixed + safe area + gap original */
+  padding-top: calc(var(--header-h) + var(--sat) + var(--sp-6));
+  /* Compensamos nav fixed + safe area bottom + gap original */
   padding-bottom: calc(var(--nav-h) + var(--sab) + var(--sp-6));
 }
 
 .mode-pwa .app-main::-webkit-scrollbar { display: none; }
 
-/* Nav bottom con +50px padding-bottom */
-.mode-pwa .app-nav {
-  padding-bottom: calc(var(--sab) + 50px);
-  height: calc(var(--nav-h) + var(--sab) + 50px);
+/* ═══════════════════════════════════════════════
+   PWA — padding extra y compensaciones
+   Solo aplica en standalone / fullscreen
+═══════════════════════════════════════════════ */
+@media (display-mode: standalone), (display-mode: fullscreen) {
+  /* Header: 60px extra de padding-top */
+  .app-header {
+    padding-top: calc(var(--sat) + 40px);
+    height: calc(var(--header-h) + var(--sat) + 50px);
+  }
+
+  /* Nav bottom: 50px extra de padding-bottom */
+  .app-nav {
+    padding-bottom: calc(var(--sab) + 30px);
+    height: calc(var(--nav-h) + var(--sab) + 50px);
+  }
+
+  /* Main compensa ambos elementos para que el contenido no quede tapado */
+  .app-main {
+    padding-top: calc(var(--header-h) + var(--sat) + 50px + var(--sp-6));
+    padding-bottom: calc(var(--nav-h) + var(--sab) + 50px + var(--sp-6));
+  }
 }
+
+
