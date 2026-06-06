@@ -657,11 +657,6 @@ body.loader-active {
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-y: contain;   /* contain evita pull-to-refresh nativo */
   scrollbar-width: none;
-  padding: var(--sp-6) calc(var(--sp-4) + var(--sal));
-  /* Compensamos header fixed + safe area + gap original */
-  padding-top: calc(var(--header-h) + var(--sat) + var(--sp-6));
-  /* Compensamos nav fixed + safe area bottom + gap original */
-  padding-bottom: calc(var(--nav-h) + var(--sab) + var(--sp-6));
 }
 
 .mode-pwa .app-main::-webkit-scrollbar { display: none; }
@@ -673,20 +668,20 @@ body.loader-active {
 @media (display-mode: standalone), (display-mode: fullscreen) {
   /* Header: 60px extra de padding-top */
   .app-header {
-    padding-top: calc(var(--sat) + 40px);
+    padding-top: calc(var(--sat) + 30px);
     height: calc(var(--header-h) + var(--sat) + 50px);
   }
 
   /* Nav bottom: 50px extra de padding-bottom */
   .app-nav {
-    padding-bottom: calc(var(--sab) + 30px);
+    padding-bottom: calc(var(--sab) + 20px);
     height: calc(var(--nav-h) + var(--sab) + 50px);
   }
 
   /* Main compensa ambos elementos para que el contenido no quede tapado */
   .app-main {
-    padding-top: calc(var(--header-h) + var(--sat) + 50px + var(--sp-6));
-    padding-bottom: calc(var(--nav-h) + var(--sab) + 50px + var(--sp-6));
+    padding-top: calc(var(--header-h) + var(--sat) + 70px + var(--sp-6));
+    padding-bottom: calc(var(--nav-h) + var(--sab) + 70px + var(--sp-6));
   }
 }
 
