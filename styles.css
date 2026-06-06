@@ -638,11 +638,8 @@ body.loader-active {
   top: 0;
   left: 0;
   right: 0;
-  min-height: var(--header-h);
 }
-.mode-pwa .app-nav {
-  min-height: var(--nav-h);
-}
+
 /* Main con scroll interno, compensa header y nav */
 .mode-pwa .app-main {
   flex: 1;
@@ -663,11 +660,13 @@ body.loader-active {
   /* Header: 60px extra de padding-top */
   .app-header {
     padding-top: calc(var(--sat) + 40px);
+        height: calc(var(--header-h) + var(--sat) + 56px);
   }
 
   /* Nav bottom: 50px extra de padding-bottom */
   .app-nav {
-    padding-bottom: calc(var(--sab) + 30px);
+    padding-bottom: calc(var(--sab) + 20px);
+        height: calc(var(--nav-h) + var(--sab) + 56px);
   }
 
   /* Main compensa ambos elementos para que el contenido no quede tapado */
