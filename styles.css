@@ -611,8 +611,8 @@ body.loader-active {
   top: 0;
   left: 0;
   right: 0;
-  padding-top: calc(var(--sat) + 40px);
-  height: calc(var(--header-h) + var(--sat) + 0px);
+  padding-top: calc(var(--sat) + 30px);
+  height: calc(var(--header-h) + var(--sat) + 50px);
 }
 
 .mode-pwa .header-inner {
@@ -626,7 +626,7 @@ body.loader-active {
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-y: contain;
   scrollbar-width: none;
-  padding-top: calc(var(--header-h) + var(--sat) + 40px + var(--sp-6));
+  padding-top: calc(var(--header-h) + var(--sat) + 50px + var(--sp-6));
   padding-bottom: calc(var(--nav-h) + var(--sab) + var(--sp-6));
 }
 
@@ -635,5 +635,5 @@ body.loader-active {
 /* Nav bottom con +50px padding-bottom */
 .mode-pwa .app-nav {
   padding-bottom: calc(var(--sab) + 30px);
-  height: calc(var(--nav-h) + var(--sab) + 0px);
+  height: calc(var(--nav-h) + var(--sab) + 50px);
 }
