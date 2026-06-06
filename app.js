@@ -6,11 +6,8 @@
 
 /* ──────────────────────────────────────────────
    1. BLOQUEO DE GESTOS NATIVOS
-   - Evita zoom con doble tap, pinch-zoom,
-     pull-to-refresh, context menu largo
 ────────────────────────────────────────────── */
 (function lockGestures() {
-  // Bloquea doble-tap zoom en iOS
   let lastTouch = 0;
   document.addEventListener('touchend', (e) => {
     const now = Date.now();
@@ -18,7 +15,6 @@
     lastTouch = now;
   }, { passive: false });
 
-  // Bloquea menú contextual en imágenes y elementos genéricos
   document.addEventListener('contextmenu', (e) => {
     const tag = e.target.tagName.toLowerCase();
     if (!['input', 'textarea', 'select'].includes(tag)) {
@@ -26,27 +22,21 @@
     }
   });
 
-  // Bloquea pinch-zoom
   document.addEventListener('touchmove', (e) => {
     if (e.touches.length > 1) e.preventDefault();
   }, { passive: false });
 
-  // Bloquea pull-to-refresh en Chrome Android
   document.body.style.overscrollBehaviorY = 'none';
 
-document.addEventListener('touchmove', (e) => {
-  if (e.target === document.body || e.target === document.documentElement) {
-    e.preventDefault();
-  }
-}, { passive: false });
-
+  document.addEventListener('touchmove', (e) => {
+    if (e.target === document.body || e.target === document.documentElement) {
+      e.preventDefault();
+    }
+  }, { passive: false });
 })();
 
 /* ──────────────────────────────────────────────
    2. SCROLL FANTASMA — bloqueo en páginas full-screen
-   El loader y cualquier vista con .page-locked
-   bloquea scroll en iOS también (position:fixed
-   no es suficiente en Safari sin esto).
 ────────────────────────────────────────────── */
 (function ghostScrollLock() {
   let lockedEl = null;
@@ -64,11 +54,9 @@ document.addEventListener('touchmove', (e) => {
 
   document.addEventListener('touchmove', (e) => {
     if (!lockedEl) return;
-    // Bloquear cualquier intento de scroll en elementos fijos
     e.preventDefault();
   }, { passive: false });
 
-  // Bloquear wheel también (desktop/iPad trackpad)
   document.addEventListener('wheel', (e) => {
     if (isLocked(e.target)) e.preventDefault();
   }, { passive: false });
@@ -76,7 +64,6 @@ document.addEventListener('touchmove', (e) => {
 
 /* ──────────────────────────────────────────────
    3. SAFE AREA — inyectar variables CSS reales
-   (útil cuando env() no tiene soporte completo)
 ────────────────────────────────────────────── */
 (function applySafeAreas() {
   function update() {
@@ -99,7 +86,6 @@ document.addEventListener('touchmove', (e) => {
   const app    = document.getElementById('app');
   if (!loader || !app) return;
 
-  // Bloquear scroll en body mientras el loader está activo
   document.body.classList.add('loader-active');
 
   function revealApp() {
@@ -120,6 +106,7 @@ document.addEventListener('touchmove', (e) => {
 
   Promise.all([minDelay, domReady]).then(revealApp);
 })();
+
 /* ──────────────────────────────────────────────
    5. RIPPLE EN BOTONES / NAV ITEMS
 ────────────────────────────────────────────── */
@@ -160,8 +147,6 @@ document.addEventListener('touchmove', (e) => {
 
 /* ──────────────────────────────────────────────
    7. VIEWPORT HEIGHT — fix para Safari/Chrome
-   100vh en Safari incluye la barra del navegador,
-   dvh lo resuelve pero aquí lo forzamos también.
 ────────────────────────────────────────────── */
 (function fixVh() {
   function setVh() {
@@ -194,8 +179,7 @@ if ('serviceWorker' in navigator) {
 })();
 
 /* ──────────────────────────────────────────────
-   10. HAPTICS (vibración táctil cuando disponible)
-   Usar: haptic('light') | haptic('medium') | haptic('heavy')
+   10. HAPTICS
 ────────────────────────────────────────────── */
 window.haptic = function haptic(type = 'light') {
   if (!navigator.vibrate) return;
@@ -215,13 +199,10 @@ window.haptic = function haptic(type = 'light') {
   window.addEventListener('offline', update);
 })();
 
-
 /* ──────────────────────────────────────────────
    12. BLOQUEO INSPECCION
 ────────────────────────────────────────────── */
-
 (function antiDevTools() {
-  // Atajos de teclado
   document.addEventListener('keydown', (e) => {
     if (
       e.key === 'F12' ||
@@ -229,49 +210,5 @@ window.haptic = function haptic(type = 'light') {
       (e.ctrlKey && e.key === 'U') ||
       (e.metaKey && e.altKey && e.key === 'I')
     ) e.preventDefault();
-  });
-})();
-
-/* ──────────────────────────────────────────────
-   13. FIX SCROLL DESKTOP — .app-main focusable
-   y redirección de teclas de navegación.
-   El body ya no scrollea (overflow:hidden), por
-   lo que las flechas/PageUp/Down deben actuar
-   sobre .app-main directamente.
-────────────────────────────────────────────── */
-(function fixDesktopScroll() {
-  const main = document.querySelector('.app-main');
-  if (!main) return;
-
-  // Hacer .app-main focusable para que las flechas del teclado lo scrolleen
-  main.setAttribute('tabindex', '0');
-  main.style.outline = 'none';
-
-  // Auto-focus al cargar para que las flechas funcionen inmediatamente
-  window.addEventListener('load', () => {
-    main.focus({ preventScroll: true });
-  });
-
-  // Redirigir teclas de navegación a .app-main cuando no estamos en un input
-  document.addEventListener('keydown', (e) => {
-    const tag = e.target.tagName.toLowerCase();
-    if (['input', 'textarea', 'select'].includes(tag)) return;
-
-    const keys = ['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', ' ', 'Home', 'End'];
-    if (!keys.includes(e.key)) return;
-
-    e.preventDefault();
-    const step = 40;
-    const page = main.clientHeight * 0.8;
-
-    switch (e.key) {
-      case 'ArrowDown':  main.scrollTop += step; break;
-      case 'ArrowUp':    main.scrollTop -= step; break;
-      case 'PageDown':
-      case ' ':          main.scrollTop += page; break;
-      case 'PageUp':     main.scrollTop -= page; break;
-      case 'Home':       main.scrollTop = 0; break;
-      case 'End':        main.scrollTop = main.scrollHeight; break;
-    }
   });
 })();

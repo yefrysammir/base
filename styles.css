@@ -2,18 +2,16 @@
    TOKENS
 ═══════════════════════════════════════════════ */
 :root {
-  /* Colores — personaliza aquí */
   --c-bg:          #0a0a0a;
   --c-surface:     #141414;
   --c-surface-2:   #1e1e1e;
   --c-border:      rgba(255,255,255,.08);
   --c-text:        #f0f0f0;
   --c-text-muted:  #888;
-  --c-accent:      #01AAE6;/*#4f8ef7*/
+  --c-accent:      #01AAE6;
   --c-accent-dark: #2a65d4;
   --c-danger:      #e05555;
 
-  /* Tipografía */
   --font-sans:  system-ui, -apple-system, BlinkMacSystemFont,
                 'Segoe UI', sans-serif;
   --font-mono:  'SF Mono', 'Fira Code', monospace;
@@ -28,7 +26,6 @@
   --fw-medium: 500;
   --fw-bold:   700;
 
-  /* Espaciado (múltiplos de 4 px) */
   --sp-1: .25rem;
   --sp-2: .5rem;
   --sp-3: .75rem;
@@ -39,29 +36,24 @@
   --sp-10: 2.5rem;
   --sp-12: 3rem;
 
-  /* Radios */
   --r-sm:   6px;
   --r-md:   12px;
   --r-lg:   18px;
   --r-full: 9999px;
 
-  /* Sombras */
   --shadow-sm: 0 1px 3px rgba(0,0,0,.4);
   --shadow-md: 0 4px 16px rgba(0,0,0,.5);
 
-  /* Transiciones */
   --ease:       cubic-bezier(.4,0,.2,1);
   --dur-fast:   120ms;
   --dur-normal: 220ms;
   --dur-slow:   380ms;
 
-  /* Safe areas — se rellenan via JS también */
   --sat: env(safe-area-inset-top,    0px);
   --sab: env(safe-area-inset-bottom, 0px);
   --sal: env(safe-area-inset-left,   0px);
   --sar: env(safe-area-inset-right,  0px);
 
-  /* Layout */
   --header-h: 56px;
   --nav-h:    56px;
 }
@@ -74,15 +66,11 @@
   margin: 0;
   padding: 0;
 }
-/*html, body {
-  overscroll-behavior-y: none;
-}*/
 
 html {
   font-size: 16px;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
-  /* Bloquea zoom */
   touch-action: manipulation;
   scroll-behavior: smooth;
   height: 100%;
@@ -90,6 +78,11 @@ html {
 
 html::-webkit-scrollbar { display: none; }
 
+/* ═══════════════════════════════════════════════
+   BODY — MODO NAVEGADOR (por defecto)
+   El body scrollea nativamente para que Safari
+   colapse su barra inferior al hacer scroll.
+═══════════════════════════════════════════════ */
 body {
   font-family: var(--font-sans);
   font-size: var(--fs-base);
@@ -97,18 +90,14 @@ body {
   color: var(--c-text);
   background: var(--c-bg);
   height: 100%;
-  /* Ocultar scrollbar — mantiene scroll funcional */
   overflow-x: hidden;
-  overflow-y: hidden; /* CAMBIO: antes era auto. Evita scroll del body para que todo el scroll sea .app-main */
+  overflow-y: auto;           /* BROWSER: body scrollea nativo */
   scrollbar-width: none;
   -ms-overflow-style: none;
   -webkit-overflow-scrolling: touch;
-  /* Sin selección por defecto */
   -webkit-user-select: none;
   user-select: none;
-  /* Sin highlight al tocar */
   -webkit-tap-highlight-color: transparent;
-  /* Suaviza fuentes */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-synthesis: none;
@@ -116,27 +105,23 @@ body {
 
 body::-webkit-scrollbar { display: none; }
 
-/* Ocultar scrollbar en TODOS los elementos scrollables */
 * { scrollbar-width: none; -ms-overflow-style: none; }
 *::-webkit-scrollbar { display: none; }
 
-/* Imágenes no seleccionables ni arrastrables */
 img, svg, video, canvas {
   -webkit-user-select: none;
   user-select: none;
   -webkit-user-drag: none;
-  pointer-events: none; /* quitar si necesitas clicks en imágenes */
+  pointer-events: none;
   display: block;
   max-width: 100%;
 }
 
-/* Botones y links — recuperar pointer events */
 a, button, [role="button"], label {
   pointer-events: auto;
   cursor: pointer;
 }
 
-/* Inputs / textareas — recuperar selección */
 input, textarea, select, [contenteditable] {
   -webkit-user-select: text;
   user-select: text;
@@ -144,7 +129,6 @@ input, textarea, select, [contenteditable] {
   font-family: inherit;
 }
 
-/* Eliminar estilos nativos de botones */
 button {
   border: none;
   background: none;
@@ -155,6 +139,7 @@ button {
   -webkit-appearance: none;
   appearance: none;
 }
+
 /* ═══════════════════════════════════════════════
    MATERIAL SYMBOLS
 ═══════════════════════════════════════════════ */
@@ -162,7 +147,7 @@ button {
   font-family: 'Material Symbols Outlined';
   font-weight: 400;
   font-style: normal;
-  font-size: 24px;           /* tamaño por defecto */
+  font-size: 24px;
   line-height: 1;
   letter-spacing: normal;
   text-transform: none;
@@ -173,40 +158,32 @@ button {
   -webkit-font-feature-settings: 'liga';
   font-feature-settings: 'liga';
   -webkit-font-smoothing: antialiased;
-  /* Axis de variación: opsz=24, wght=400, FILL=0, GRAD=0 */
   font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
   user-select: none;
   pointer-events: none;
   flex-shrink: 0;
 }
 
-/* Variantes de tamaño */
 .icon-sm  { font-size: 18px; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20; }
 .icon-lg  { font-size: 32px; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 40; }
 .icon-xl  { font-size: 48px; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48; }
 
-/* Variante filled — para estado activo */
 .icon-filled {
   font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
 }
 
 /* ═══════════════════════════════════════════════
-   SCROLL FANTASMA — páginas full-screen
-   Usar clase .page-locked en cualquier vista
-   que ocupe el 100% y no deba scrollear.
-   El loader y el app shell lo usan por defecto.
+   SCROLL FANTASMA
 ═══════════════════════════════════════════════ */
 .page-locked,
 #app-loader {
   overflow: hidden !important;
   touch-action: none;
   overscroll-behavior: none;
-  /* Necesario en iOS para bloquear bounce */
   position: fixed;
   inset: 0;
 }
 
-/* Cuando el loader está activo, bloquear body también */
 body.loader-active {
   overflow: hidden;
   position: fixed;
@@ -247,7 +224,6 @@ body.loader-active {
   letter-spacing: -.02em;
 }
 
-/* Animación letra a letra mientras carga */
 .loader-letter {
   opacity: 0;
   transform: translateY(12px);
@@ -282,13 +258,12 @@ body.loader-active {
 }
 
 /* ═══════════════════════════════════════════════
-   APP SHELL
+   APP SHELL — MODO NAVEGADOR (por defecto)
 ═══════════════════════════════════════════════ */
 #app {
   display: flex;
   flex-direction: column;
-  height: 100dvh;           /* CAMBIO: antes era min-height. Fuerza altura exacta para que flex:1 funcione */
-  min-height: 100vh;        /* fallback */
+  min-height: 100vh;          /* BROWSER: min-height para scroll nativo body */
   opacity: 1;
   transition: opacity var(--dur-normal) var(--ease);
 }
@@ -302,7 +277,6 @@ body.loader-active {
    SAFE AREA SPACERS
 ═══════════════════════════════════════════════ */
 .safe-top-spacer {
-  display: none;            /* CAMBIO: el header fixed gestiona su propio espacio top (safe area + padding) */
   height: var(--sat);
   flex-shrink: 0;
 }
@@ -313,16 +287,13 @@ body.loader-active {
 }
 
 /* ═══════════════════════════════════════════════
-   HEADER
+   HEADER — MODO NAVEGADOR (sticky, bounce nativo)
 ═══════════════════════════════════════════════ */
 .app-header {
-  position: fixed;          /* CAMBIO: antes era sticky. Fixed evita que el bounce lo mueva */
+  position: sticky;           /* BROWSER: sticky para bounce nativo */
   top: 0;
-  left: 0;
-  right: 0;
   z-index: 100;
-  height: calc(var(--header-h) + var(--sat)); /* Altura base + safe area top */
-  padding-top: var(--sat);  /* Respeta notch/status bar */
+  height: var(--header-h);
   background: color-mix(in srgb, var(--c-bg) 80%, transparent);
   -webkit-backdrop-filter: blur(16px) saturate(1.5);
   backdrop-filter: blur(16px) saturate(1.5);
@@ -334,7 +305,7 @@ body.loader-active {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: var(--header-h);  /* CAMBIO: antes era 100%. Fijamos altura real del contenido para que no se comprima con padding */
+  height: 100%;
   padding: 0 calc(var(--sp-4) + var(--sal)) 0 calc(var(--sp-4) + var(--sal));
 }
 
@@ -358,23 +329,15 @@ body.loader-active {
 .icon-btn:active { background: var(--c-surface-2); }
 
 /* ═══════════════════════════════════════════════
-   MAIN / SCROLL AREA
+   MAIN — MODO NAVEGADOR (sin scroll interno)
 ═══════════════════════════════════════════════ */
 .app-main {
   flex: 1;
-  overflow-y: auto;
+  overflow-y: visible;        /* BROWSER: sin scroll interno */
   overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior-y: contain;   /* contain evita pull-to-refresh nativo */
-  scrollbar-width: none;
   padding: var(--sp-6) calc(var(--sp-4) + var(--sal));
-  /* Compensamos header fixed + safe area + gap original */
-  padding-top: calc(var(--header-h) + var(--sat) + var(--sp-6));
-  /* Compensamos nav fixed + safe area bottom + gap original */
   padding-bottom: calc(var(--nav-h) + var(--sab) + var(--sp-6));
 }
-
-.app-main::-webkit-scrollbar { display: none; }
 
 /* ═══════════════════════════════════════════════
    SECCIONES / CONTENIDO BASE
@@ -542,21 +505,17 @@ body.loader-active {
 /* ═══════════════════════════════════════════════
    UTILIDADES
 ═══════════════════════════════════════════════ */
-
-/* Texto seleccionable (para párrafos que sí deben copiarse) */
 .selectable {
   -webkit-user-select: text;
   user-select: text;
 }
 
-/* Truncar texto */
 .truncate {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
 
-/* Ocultar visualmente pero mantener accesibilidad */
 .sr-only {
   position: absolute;
   width: 1px; height: 1px;
@@ -567,14 +526,12 @@ body.loader-active {
   border: 0;
 }
 
-/* Divisor */
 .divider {
   height: 1px;
   background: var(--c-border);
   margin: var(--sp-4) 0;
 }
 
-/* Card base */
 .card {
   background: var(--c-surface);
   border: 1px solid var(--c-border);
@@ -617,8 +574,6 @@ body.loader-active {
 
 /* ═══════════════════════════════════════════════
    RESPONSIVE — tablet/desktop
-   La app ya es mobile-first; en pantallas grandes
-   se puede "box" para que no se estire demasiado.
 ═══════════════════════════════════════════════ */
 @media (min-width: 640px) {
   .app-header .header-inner,
@@ -629,25 +584,56 @@ body.loader-active {
 }
 
 /* ═══════════════════════════════════════════════
-   PWA — padding extra y compensaciones
-   Solo aplica en standalone / fullscreen
+   ╔═══════════════════════════════════════════╗
+   ║  PWA — SOLO .mode-pwa en <html>           ║
+   ╚═══════════════════════════════════════════╝
 ═══════════════════════════════════════════════ */
-@media (display-mode: standalone), (display-mode: fullscreen) {
-  /* Header: 60px extra de padding-top */
-  .app-header {
-    padding-top: calc(var(--sat) + 60px);
-    height: calc(var(--header-h) + var(--sat) + 60px);
-  }
 
-  /* Nav bottom: 50px extra de padding-bottom */
-  .app-nav {
-    padding-bottom: calc(var(--sab) + 50px);
-    height: calc(var(--nav-h) + var(--sab) + 50px);
-  }
+/* Body sin scroll, todo va dentro de #app */
+.mode-pwa body {
+  overflow-y: hidden;
+}
 
-  /* Main compensa ambos elementos para que el contenido no quede tapado */
-  .app-main {
-    padding-top: calc(var(--header-h) + var(--sat) + 60px + var(--sp-6));
-    padding-bottom: calc(var(--nav-h) + var(--sab) + 50px + var(--sp-6));
-  }
+/* #app ocupa exactamente el viewport */
+.mode-pwa #app {
+  height: 100dvh;
+  min-height: auto;
+}
+
+/* Spacer top oculto, el header fixed lo gestiona */
+.mode-pwa .safe-top-spacer {
+  display: none;
+}
+
+/* Header FIJO, inmune al bounce, con +60px padding-top */
+.mode-pwa .app-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding-top: calc(var(--sat) + 60px);
+  height: calc(var(--header-h) + var(--sat) + 60px);
+}
+
+.mode-pwa .header-inner {
+  height: var(--header-h);
+}
+
+/* Main con scroll interno, compensa header y nav */
+.mode-pwa .app-main {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+  scrollbar-width: none;
+  padding-top: calc(var(--header-h) + var(--sat) + 60px + var(--sp-6));
+  padding-bottom: calc(var(--nav-h) + var(--sab) + var(--sp-6));
+}
+
+.mode-pwa .app-main::-webkit-scrollbar { display: none; }
+
+/* Nav bottom con +50px padding-bottom */
+.mode-pwa .app-nav {
+  padding-bottom: calc(var(--sab) + 50px);
+  height: calc(var(--nav-h) + var(--sab) + 50px);
 }
