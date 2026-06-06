@@ -295,8 +295,6 @@ body.loader-active {
   z-index: 100;
   height: var(--header-h);
   background: var(--c-bg);
-  -webkit-backdrop-filter: blur(16px) saturate(1.5);
-  backdrop-filter: blur(16px) saturate(1.5);
   border-bottom: 1px solid var(--c-border);
   flex-shrink: 0;
 }
@@ -468,8 +466,6 @@ body.loader-active {
   height: calc(var(--nav-h) + var(--sab));
   padding-bottom: var(--sab);
   background: var(--c-bg);
-  -webkit-backdrop-filter: blur(16px) saturate(1.5);
-  backdrop-filter: blur(16px) saturate(1.5);
   border-top: 1px solid var(--c-border);
   display: flex;
   align-items: stretch;
@@ -664,13 +660,11 @@ body.loader-active {
   /* Header: 60px extra de padding-top */
   .app-header {
     padding-top: calc(var(--sat) + 30px);
-    height: calc(var(--header-h) + var(--sat) + 30px);
   }
 
   /* Nav bottom: 50px extra de padding-bottom */
   .app-nav {
     padding-bottom: calc(var(--sab) + 20px);
-    height: calc(var(--nav-h) + var(--sab) + 30px);
   }
 
   /* Main compensa ambos elementos para que el contenido no quede tapado */
