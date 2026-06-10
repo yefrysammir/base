@@ -6,8 +6,11 @@
 
 /* ──────────────────────────────────────────────
    1. BLOQUEO DE GESTOS NATIVOS
+   - Evita zoom con doble tap, pinch-zoom,
+     pull-to-refresh, context menu largo
 ────────────────────────────────────────────── */
 (function lockGestures() {
+  // Bloquea doble-tap zoom en iOS
   let lastTouch = 0;
   document.addEventListener('touchend', (e) => {
     const now = Date.now();
@@ -15,6 +18,7 @@
     lastTouch = now;
   }, { passive: false });
 
+  // Bloquea menú contextual en imágenes y elementos genéricos
   document.addEventListener('contextmenu', (e) => {
     const tag = e.target.tagName.toLowerCase();
     if (!['input', 'textarea', 'select'].includes(tag)) {
@@ -22,10 +26,12 @@
     }
   });
 
+  // Bloquea pinch-zoom
   document.addEventListener('touchmove', (e) => {
     if (e.touches.length > 1) e.preventDefault();
   }, { passive: false });
 
+  // Bloquea pull-to-refresh en Chrome Android
   document.body.style.overscrollBehaviorY = 'none';
 
   document.addEventListener('touchmove', (e) => {
@@ -33,6 +39,7 @@
       e.preventDefault();
     }
   }, { passive: false });
+
 })();
 
 /* ──────────────────────────────────────────────
@@ -133,15 +140,58 @@
 })();
 
 /* ──────────────────────────────────────────────
-   6. BOTTOM NAV — highlight activo
+   6. BOTTOM NAV — pill animado + highlight activo
+   El pill (.nav-pill) se desliza debajo del ítem
+   activo usando translateX, calculando su posición
+   exacta a partir del getBoundingClientRect del
+   item y del nav container.
 ────────────────────────────────────────────── */
 (function initNav() {
+  const nav   = document.querySelector('.app-nav');
+  const pill  = document.querySelector('.nav-pill');
   const items = document.querySelectorAll('.nav-item');
+
+  if (!nav || !pill || !items.length) return;
+
+  // Mueve el pill al ítem indicado
+  function movePill(item) {
+    const navRect  = nav.getBoundingClientRect();
+    const itemRect = item.getBoundingClientRect();
+    const pillW    = Math.min(itemRect.width * 0.72, 80); // ancho del pill: 72% del item, máx 80px
+    const centerX  = itemRect.left - navRect.left + itemRect.width / 2;
+    const targetX  = centerX - pillW / 2;
+
+    pill.style.width     = `${pillW}px`;
+    pill.style.transform = `translateX(${targetX}px)`;
+  }
+
+  // Posición inicial (sin animación)
+  const initial = nav.querySelector('.nav-item.active');
+  if (initial) {
+    pill.style.transition = 'none';
+    movePill(initial);
+    // Forzar reflow para que la transición no se aplique al primer render
+    pill.getBoundingClientRect();
+    pill.style.transition = '';
+  }
+
   items.forEach(item => {
     item.addEventListener('click', () => {
       items.forEach(i => i.classList.remove('active'));
       item.classList.add('active');
+      movePill(item);
     });
+  });
+
+  // Recalcular si cambia el tamaño (rotación, resize)
+  window.addEventListener('resize', () => {
+    const active = nav.querySelector('.nav-item.active');
+    if (active) {
+      pill.style.transition = 'none';
+      movePill(active);
+      pill.getBoundingClientRect();
+      pill.style.transition = '';
+    }
   });
 })();
 
@@ -170,7 +220,6 @@ if ('serviceWorker' in navigator) {
 
 /* ──────────────────────────────────────────────
    9. DETECCIÓN DE MODO (PWA vs Browser)
-   Agrega clase al <html> para estilos específicos
 ────────────────────────────────────────────── */
 (function detectMode() {
   const isPWA = window.matchMedia('(display-mode: standalone)').matches
@@ -200,7 +249,7 @@ window.haptic = function haptic(type = 'light') {
 })();
 
 /* ──────────────────────────────────────────────
-   12. BLOQUEO INSPECCION
+   12. BLOQUEO INSPECCIÓN
 ────────────────────────────────────────────── */
 (function antiDevTools() {
   document.addEventListener('keydown', (e) => {
@@ -210,5 +259,42 @@ window.haptic = function haptic(type = 'light') {
       (e.ctrlKey && e.key === 'U') ||
       (e.metaKey && e.altKey && e.key === 'I')
     ) e.preventDefault();
+  });
+})();
+
+/* ──────────────────────────────────────────────
+   13. FIX SCROLL DESKTOP — .app-main focusable
+────────────────────────────────────────────── */
+(function fixDesktopScroll() {
+  const main = document.querySelector('.app-main');
+  if (!main) return;
+
+  main.setAttribute('tabindex', '0');
+  main.style.outline = 'none';
+
+  window.addEventListener('load', () => {
+    main.focus({ preventScroll: true });
+  });
+
+  document.addEventListener('keydown', (e) => {
+    const tag = e.target.tagName.toLowerCase();
+    if (['input', 'textarea', 'select'].includes(tag)) return;
+
+    const keys = ['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', ' ', 'Home', 'End'];
+    if (!keys.includes(e.key)) return;
+
+    e.preventDefault();
+    const step = 40;
+    const page = main.clientHeight * 0.8;
+
+    switch (e.key) {
+      case 'ArrowDown':  main.scrollTop += step; break;
+      case 'ArrowUp':    main.scrollTop -= step; break;
+      case 'PageDown':
+      case ' ':          main.scrollTop += page; break;
+      case 'PageUp':     main.scrollTop -= page; break;
+      case 'Home':       main.scrollTop = 0; break;
+      case 'End':        main.scrollTop = main.scrollHeight; break;
+    }
   });
 })();

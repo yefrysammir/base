@@ -2,16 +2,18 @@
    TOKENS
 ═══════════════════════════════════════════════ */
 :root {
+  /* Colores — personaliza aquí */
   --c-bg:          #0a0a0a;
   --c-surface:     #141414;
   --c-surface-2:   #1e1e1e;
-  --c-border:      rgba(255,255,255,.08);
+  --c-border:      rgba(255,255,255,.07);
   --c-text:        #f0f0f0;
   --c-text-muted:  #888;
-  --c-accent:      #01AAE6;
-  --c-accent-dark: #2a65d4;
+  --c-accent:      #0db9ab;/*#4f8ef7*/
+  --c-accent-dark: #0d9d91;
   --c-danger:      #e05555;
 
+  /* Tipografía */
   --font-sans:  system-ui, -apple-system, BlinkMacSystemFont,
                 'Segoe UI', sans-serif;
   --font-mono:  'SF Mono', 'Fira Code', monospace;
@@ -26,6 +28,7 @@
   --fw-medium: 500;
   --fw-bold:   700;
 
+  /* Espaciado (múltiplos de 4 px) */
   --sp-1: .25rem;
   --sp-2: .5rem;
   --sp-3: .75rem;
@@ -36,24 +39,29 @@
   --sp-10: 2.5rem;
   --sp-12: 3rem;
 
+  /* Radios */
   --r-sm:   6px;
   --r-md:   12px;
   --r-lg:   18px;
   --r-full: 9999px;
 
+  /* Sombras */
   --shadow-sm: 0 1px 3px rgba(0,0,0,.4);
   --shadow-md: 0 4px 16px rgba(0,0,0,.5);
 
+  /* Transiciones */
   --ease:       cubic-bezier(.4,0,.2,1);
   --dur-fast:   120ms;
   --dur-normal: 220ms;
   --dur-slow:   380ms;
 
+  /* Safe areas — se rellenan via JS también */
   --sat: env(safe-area-inset-top,    0px);
   --sab: env(safe-area-inset-bottom, 0px);
   --sal: env(safe-area-inset-left,   0px);
   --sar: env(safe-area-inset-right,  0px);
 
+  /* Layout */
   --header-h: 56px;
   --nav-h:    56px;
 }
@@ -66,11 +74,15 @@
   margin: 0;
   padding: 0;
 }
+/*html, body {
+  overscroll-behavior-y: none;
+}*/
 
 html {
   font-size: 16px;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  /* Bloquea zoom */
   touch-action: manipulation;
   scroll-behavior: smooth;
   height: 100%;
@@ -78,11 +90,6 @@ html {
 
 html::-webkit-scrollbar { display: none; }
 
-/* ═══════════════════════════════════════════════
-   BODY — MODO NAVEGADOR (por defecto)
-   El body scrollea nativamente para que Safari
-   colapse su barra inferior al hacer scroll.
-═══════════════════════════════════════════════ */
 body {
   font-family: var(--font-sans);
   font-size: var(--fs-base);
@@ -90,14 +97,18 @@ body {
   color: var(--c-text);
   background: var(--c-bg);
   height: 100%;
+  /* Ocultar scrollbar — mantiene scroll funcional */
   overflow-x: hidden;
-  overflow-y: auto;           /* BROWSER: body scrollea nativo */
+  overflow-y: hidden; /* CAMBIO: antes era auto. Evita scroll del body para que todo el scroll sea .app-main */
   scrollbar-width: none;
   -ms-overflow-style: none;
   -webkit-overflow-scrolling: touch;
+  /* Sin selección por defecto */
   -webkit-user-select: none;
   user-select: none;
+  /* Sin highlight al tocar */
   -webkit-tap-highlight-color: transparent;
+  /* Suaviza fuentes */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-synthesis: none;
@@ -105,23 +116,27 @@ body {
 
 body::-webkit-scrollbar { display: none; }
 
+/* Ocultar scrollbar en TODOS los elementos scrollables */
 * { scrollbar-width: none; -ms-overflow-style: none; }
 *::-webkit-scrollbar { display: none; }
 
+/* Imágenes no seleccionables ni arrastrables */
 img, svg, video, canvas {
   -webkit-user-select: none;
   user-select: none;
   -webkit-user-drag: none;
-  pointer-events: none;
+  pointer-events: none; /* quitar si necesitas clicks en imágenes */
   display: block;
   max-width: 100%;
 }
 
+/* Botones y links — recuperar pointer events */
 a, button, [role="button"], label {
   pointer-events: auto;
   cursor: pointer;
 }
 
+/* Inputs / textareas — recuperar selección */
 input, textarea, select, [contenteditable] {
   -webkit-user-select: text;
   user-select: text;
@@ -129,6 +144,7 @@ input, textarea, select, [contenteditable] {
   font-family: inherit;
 }
 
+/* Eliminar estilos nativos de botones */
 button {
   border: none;
   background: none;
@@ -139,7 +155,6 @@ button {
   -webkit-appearance: none;
   appearance: none;
 }
-
 /* ═══════════════════════════════════════════════
    MATERIAL SYMBOLS
 ═══════════════════════════════════════════════ */
@@ -147,7 +162,7 @@ button {
   font-family: 'Material Symbols Outlined';
   font-weight: 400;
   font-style: normal;
-  font-size: 24px;
+  font-size: 24px;           /* tamaño por defecto */
   line-height: 1;
   letter-spacing: normal;
   text-transform: none;
@@ -158,32 +173,40 @@ button {
   -webkit-font-feature-settings: 'liga';
   font-feature-settings: 'liga';
   -webkit-font-smoothing: antialiased;
+  /* Axis de variación: opsz=24, wght=400, FILL=0, GRAD=0 */
   font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
   user-select: none;
   pointer-events: none;
   flex-shrink: 0;
 }
 
+/* Variantes de tamaño */
 .icon-sm  { font-size: 18px; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20; }
 .icon-lg  { font-size: 32px; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 40; }
 .icon-xl  { font-size: 48px; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48; }
 
+/* Variante filled — para estado activo */
 .icon-filled {
   font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
 }
 
 /* ═══════════════════════════════════════════════
-   SCROLL FANTASMA
+   SCROLL FANTASMA — páginas full-screen
+   Usar clase .page-locked en cualquier vista
+   que ocupe el 100% y no deba scrollear.
+   El loader y el app shell lo usan por defecto.
 ═══════════════════════════════════════════════ */
 .page-locked,
 #app-loader {
   overflow: hidden !important;
   touch-action: none;
   overscroll-behavior: none;
+  /* Necesario en iOS para bloquear bounce */
   position: fixed;
   inset: 0;
 }
 
+/* Cuando el loader está activo, bloquear body también */
 body.loader-active {
   overflow: hidden;
   position: fixed;
@@ -224,6 +247,7 @@ body.loader-active {
   letter-spacing: -.02em;
 }
 
+/* Animación letra a letra mientras carga */
 .loader-letter {
   opacity: 0;
   transform: translateY(12px);
@@ -258,12 +282,13 @@ body.loader-active {
 }
 
 /* ═══════════════════════════════════════════════
-   APP SHELL — MODO NAVEGADOR (por defecto)
+   APP SHELL
 ═══════════════════════════════════════════════ */
 #app {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;          /* BROWSER: min-height para scroll nativo body */
+  height: 100dvh;           /* CAMBIO: antes era min-height. Fuerza altura exacta para que flex:1 funcione */
+  min-height: 100vh;        /* fallback */
   opacity: 1;
   transition: opacity var(--dur-normal) var(--ease);
 }
@@ -277,6 +302,7 @@ body.loader-active {
    SAFE AREA SPACERS
 ═══════════════════════════════════════════════ */
 .safe-top-spacer {
+  display: none;            /* CAMBIO: el header fixed gestiona su propio espacio top (safe area + padding) */
   height: var(--sat);
   flex-shrink: 0;
 }
@@ -287,14 +313,19 @@ body.loader-active {
 }
 
 /* ═══════════════════════════════════════════════
-   HEADER — MODO NAVEGADOR (sticky, bounce nativo)
+   HEADER
 ═══════════════════════════════════════════════ */
 .app-header {
-  position: sticky;           /* BROWSER: sticky para bounce nativo */
+  position: fixed;          /* CAMBIO: antes era sticky. Fixed evita que el bounce lo mueva */
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 100;
-  height: var(--header-h);
-  background: var(--c-bg);
+  height: calc(var(--header-h) + var(--sat)); /* Altura base + safe area top */
+  padding-top: var(--sat);  /* Respeta notch/status bar */
+  background: color-mix(in srgb, var(--c-bg) 80%, transparent);
+  -webkit-backdrop-filter: blur(16px) saturate(1.5);
+  backdrop-filter: blur(16px) saturate(1.5);
   border-bottom: 1px solid var(--c-border);
   flex-shrink: 0;
 }
@@ -303,7 +334,7 @@ body.loader-active {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 100%;
+  height: var(--header-h);  /* CAMBIO: antes era 100%. Fijamos altura real del contenido para que no se comprima con padding */
   padding: 0 calc(var(--sp-4) + var(--sal)) 0 calc(var(--sp-4) + var(--sal));
 }
 
@@ -327,15 +358,23 @@ body.loader-active {
 .icon-btn:active { background: var(--c-surface-2); }
 
 /* ═══════════════════════════════════════════════
-   MAIN — MODO NAVEGADOR (sin scroll interno)
+   MAIN / SCROLL AREA
 ═══════════════════════════════════════════════ */
 .app-main {
   flex: 1;
-  overflow-y: visible;        /* BROWSER: sin scroll interno */
+  overflow-y: auto;
   overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;   /* contain evita pull-to-refresh nativo */
+  scrollbar-width: none;
   padding: var(--sp-6) calc(var(--sp-4) + var(--sal));
-  padding-bottom: calc(var(--nav-h) + var(--sab) + 50px + var(--sp-6));
+  /* Compensamos header fixed + safe area + gap original */
+  padding-top: calc(var(--header-h) + var(--sat) + var(--sp-6));
+  /* Compensamos nav fixed + safe area bottom + gap original */
+  padding-bottom: calc(var(--nav-h) + var(--sab) + var(--sp-6));
 }
+
+.app-main::-webkit-scrollbar { display: none; }
 
 /* ═══════════════════════════════════════════════
    SECCIONES / CONTENIDO BASE
@@ -455,63 +494,130 @@ body.loader-active {
 }
 
 /* ═══════════════════════════════════════════════
-   BOTTOM NAV
+   BOTTOM NAV — estilo App Store / Instagram
+   Pill indicator animado + iconos filled en activo
 ═══════════════════════════════════════════════ */
 .app-nav {
   position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  bottom: 15px;
+  left: 15px;
+  right: 15px;
   z-index: 100;
+
+  /* Altura base + safe area bottom real del dispositivo */
   height: calc(var(--nav-h) + var(--sab));
   padding-bottom: var(--sab);
-  background: var(--c-bg);
-  border-top: 1px solid var(--c-border);
+
+  background: color-mix(in srgb, var(--c-bg) 82%, transparent);
+  -webkit-backdrop-filter: blur(20px) saturate(1.8);
+  backdrop-filter: blur(20px) saturate(1.8);
+  border: 1px solid var(--c-border);
+border-radius: var(--r-full);
   display: flex;
   align-items: stretch;
+
+  /* El pill se posiciona dentro de este contexto */
+  position: fixed;
 }
 
+/* Pill indicator — se mueve via JS con transform */
+.nav-pill {
+  position: absolute;
+  top: 8px;
+  height: calc(var(--nav-h) - 16px); /* mismo alto que la zona de ícono + label */
+  width: 64px;                         /* se recalcula en JS */
+  background: color-mix(in srgb, var(--c-accent) 14%, transparent);
+  border-radius: var(--r-full);
+  pointer-events: none;
+  transition: transform var(--dur-normal) var(--ease),
+              width     var(--dur-normal) var(--ease),
+              opacity   var(--dur-normal) var(--ease);
+  will-change: transform;
+  left: 0; /* origen; JS aplica translateX */
+}
+
+/* Item base */
 .nav-item {
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--sp-1);
+  gap: 3px;
   color: var(--c-text-muted);
   padding-bottom: 2px;
-  transition: color var(--dur-fast) var(--ease);
   position: relative;
+  transition: color var(--dur-fast) var(--ease);
+  /* Escala al soltar: micro feedback táctil */
+  transform: scale(1);
+  transition: color var(--dur-fast) var(--ease),
+              transform var(--dur-fast) var(--ease);
 }
 
-.nav-item.active  { color: var(--c-accent); }
-.nav-item:active  { opacity: .7; }
+/* Estado activo */
+.nav-item.active {
+  color: var(--c-accent);
+}
 
+/* Tap feedback: aplasta y suelta */
+.nav-item:active {
+  transform: scale(.88);
+  opacity: .8;
+}
+
+/* Ícono: relleno en activo (font-variation-settings) */
 .nav-icon {
-  width: 22px;
-  height: 22px;
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+  line-height: 1;
+  font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+  transition: font-variation-settings var(--dur-fast) var(--ease),
+              transform var(--dur-normal) cubic-bezier(.34,1.56,.64,1);
 }
 
+.nav-item.active .nav-icon {
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  transform: scale(1.12);
+}
+
+/* Label */
 .nav-label {
-  font-size: var(--fs-xs);
+  font-size: 10px;
   font-weight: var(--fw-medium);
-  letter-spacing: .01em;
+  letter-spacing: .02em;
+  line-height: 1;
+  opacity: .5;
+  transform: translateY(2px);
+  transition: opacity var(--dur-fast) var(--ease),
+              transform var(--dur-fast) var(--ease),
+              color var(--dur-fast) var(--ease);
+}
+
+.nav-item.active .nav-label {
+  opacity: 1;
+  transform: translateY(0);
+  font-weight: var(--fw-bold);
 }
 
 /* ═══════════════════════════════════════════════
    UTILIDADES
 ═══════════════════════════════════════════════ */
+
+/* Texto seleccionable (para párrafos que sí deben copiarse) */
 .selectable {
   -webkit-user-select: text;
   user-select: text;
 }
 
+/* Truncar texto */
 .truncate {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
 
+/* Ocultar visualmente pero mantener accesibilidad */
 .sr-only {
   position: absolute;
   width: 1px; height: 1px;
@@ -522,12 +628,14 @@ body.loader-active {
   border: 0;
 }
 
+/* Divisor */
 .divider {
   height: 1px;
   background: var(--c-border);
   margin: var(--sp-4) 0;
 }
 
+/* Card base */
 .card {
   background: var(--c-surface);
   border: 1px solid var(--c-border);
@@ -570,6 +678,8 @@ body.loader-active {
 
 /* ═══════════════════════════════════════════════
    RESPONSIVE — tablet/desktop
+   La app ya es mobile-first; en pantallas grandes
+   se puede "box" para que no se estire demasiado.
 ═══════════════════════════════════════════════ */
 @media (min-width: 640px) {
   .app-header .header-inner,
@@ -580,100 +690,16 @@ body.loader-active {
 }
 
 /* ═══════════════════════════════════════════════
-   ╔═══════════════════════════════════════════╗
-   ║  PWA — SOLO .mode-pwa en <html>           ║
-   ╚═══════════════════════════════════════════╝
-═══════════════════════════════════════════════ */
-
-/* Body sin scroll, todo va dentro de #app */
-.mode-pwa body {
-  height: 100%;
-  /* Ocultar scrollbar — mantiene scroll funcional */
-  overflow-x: hidden;
-  overflow-y: hidden; /* CAMBIO: antes era auto. Evita scroll del body para que todo el scroll sea .app-main */
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  -webkit-overflow-scrolling: touch;
-  /* Sin selección por defecto */
-  -webkit-user-select: none;
-  user-select: none;
-  /* Sin highlight al tocar */
-  -webkit-tap-highlight-color: transparent;
-  /* Suaviza fuentes */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  font-synthesis: none;
-}
-
-/* #app ocupa exactamente el viewport */
-.mode-pwa #app {
-  display: flex;
-  flex-direction: column;
-  height: 100dvh;           /* CAMBIO: antes era min-height. Fuerza altura exacta para que flex:1 funcione */
-  min-height: 100vh;        /* fallback */
-  opacity: 1;
-  transition: opacity var(--dur-normal) var(--ease);
-}
-
-.mode-pwa #app.app-hidden {
-  opacity: 0;
-  pointer-events: none;
-}
-
-/* Spacer top oculto, el header fixed lo gestiona */
-.mode-pwa .safe-top-spacer {
-  display: none;            /* CAMBIO: el header fixed gestiona su propio espacio top (safe area + padding) */
-  height: var(--sat);
-  flex-shrink: 0;
-}
-
-.mode-pwa .safe-bottom-spacer {
-  height: var(--sab);
-  flex-shrink: 0;
-}
-
-/* Header FIJO, inmune al bounce, con +60px padding-top */
-.mode-pwa .app-header {
-  position: fixed;          /* CAMBIO: antes era sticky. Fixed evita que el bounce lo mueva */
-  top: 0;
-  left: 0;
-  right: 0;
-}
-
-/* Main con scroll interno, compensa header y nav */
-.mode-pwa .app-main {
-  flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior-y: contain;   /* contain evita pull-to-refresh nativo */
-  scrollbar-width: none;
-}
-
-.mode-pwa .app-main::-webkit-scrollbar { display: none; }
-
-/* ═══════════════════════════════════════════════
-   PWA — padding extra y compensaciones
-   Solo aplica en standalone / fullscreen
+   PWA — solo safe areas, sin padding extra fijo.
+   El header y nav ya compensan --sat / --sab en
+   su CSS base, así que aquí solo aseguramos que
+   el main también las refleje correctamente.
+   Las barras tienen exactamente el mismo tamaño
+   en browser y en standalone.
 ═══════════════════════════════════════════════ */
 @media (display-mode: standalone), (display-mode: fullscreen) {
-  /* Header: 60px extra de padding-top */
-  .app-header {
-    padding-top: calc(var(--sat) + 40px);
-        height: calc(var(--header-h) + var(--sat) + 56px);
-  }
-
-  /* Nav bottom: 50px extra de padding-bottom */
-  .app-nav {
-    padding-bottom: calc(var(--sab) + 20px);
-        height: calc(var(--nav-h) + var(--sab) + 56px);
-  }
-
-  /* Main compensa ambos elementos para que el contenido no quede tapado */
-  .app-main {
-    padding-top: calc(var(--header-h) + var(--sat) + 55px + var(--sp-6));
-    padding-bottom: calc(var(--nav-h) + var(--sab) + 45px + var(--sp-6));
-  }
+  /* Sin overrides: header-h y nav-h no cambian.
+     Solo --sat y --sab crecen si el dispositivo
+     tiene notch/home-indicator, y ya están
+     integradas en las fórmulas del CSS base. */
 }
-
-
